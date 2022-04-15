@@ -6,16 +6,6 @@ public class Message {
     private String message;
     private String timeStamp;
 
-    @Override
-    public String toString() {
-        return "Message{"
-                + "id = " + id
-                + ", userId = " + userId
-                + ", message = " + message
-                + ", timeStamp = " + timeStamp
-                + "}";
-    }
-
     public Long getId() {
         return id;
     }
@@ -46,5 +36,15 @@ public class Message {
 
     public void setTimeStamp(String timeStamp) {
         this.timeStamp = timeStamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{"
+                + "id = " + id
+                + ", userId = " + userId
+                + ", message = " + message
+                + ", timeStamp = " + timeStamp
+                + "}";
     }
 }

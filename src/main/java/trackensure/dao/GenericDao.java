@@ -8,7 +8,7 @@ public interface GenericDao<T> {
 
     Optional<T> get(Long id);
 
-    T update(T element);
+    Boolean update(T element);
 
     boolean delete(T element);
 

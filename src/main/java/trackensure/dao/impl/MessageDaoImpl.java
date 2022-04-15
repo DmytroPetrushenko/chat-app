@@ -71,7 +71,7 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public Message update(Message message) {
+    public Boolean update(Message message) {
         String query = "UPDATE messages SET user_id = ?, message = ?, time_stamp = ? "
                 + "WHERE id = ? AND is_deleted = false";
         try (Connection connection = ConnectionUtil.getConnection();
@@ -80,15 +80,11 @@ public class MessageDaoImpl implements MessageDao {
             updateMessageStatement.setString(2, message.getMessage());
             updateMessageStatement.setString(3, message.getTimeStamp());
             updateMessageStatement.setObject(4, message.getId());
-            ResultSet resultSet = updateMessageStatement.executeQuery();
-            if (resultSet.next()) {
-                message = getMessageFromResultSet(resultSet);
-            }
+            return updateMessageStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new RuntimeException("Can't update a message "
                     + message + " in DB", e);
         }
-        return message;
     }
 
     @Override

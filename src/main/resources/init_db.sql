@@ -19,6 +19,7 @@ CREATE TABLE `messages` (
 CREATE TABLE `users` (
                          `id` bigint NOT NULL AUTO_INCREMENT,
                          `name` varchar(45) NOT NULL,
+                         `is_deleted` tinyint NOT NULL DEFAULT '0',
                          PRIMARY KEY (`id`),
-                         UNIQUE KEY `users_name_uindex` (`name`)
+                         UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
