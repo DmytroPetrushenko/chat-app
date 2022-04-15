@@ -1,10 +1,20 @@
 package trackensure.model;
 
-public class Messages {
+public class Message {
     private Long id;
     private Long userId;
     private String message;
     private String timeStamp;
+
+    @Override
+    public String toString() {
+        return "Message{"
+                + "id = " + id
+                + ", userId = " + userId
+                + ", message = " + message
+                + ", timeStamp = " + timeStamp
+                + "}";
+    }
 
     public Long getId() {
         return id;
