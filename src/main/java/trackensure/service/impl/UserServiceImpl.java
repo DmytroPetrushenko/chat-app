@@ -12,8 +12,9 @@ public class UserServiceImpl implements UserService {
     @Inject
     private UserDao userDao;
 
+
     @Override
-    public User login(String login) {
+    public User logging(String login) {
         Optional<User> optionalUser = userDao.getByLogin(login);
         if (optionalUser.isEmpty()) {
             User user = new User();
@@ -21,6 +22,13 @@ public class UserServiceImpl implements UserService {
             return userDao.create(user);
         }
         return optionalUser.get();
+    }
+
+    @Override
+    public User getByLogin(String login) {
+        return userDao.getByLogin(login).orElseThrow(() -> {
+            throw new RuntimeException("No User by login" + login + "in DB!");
+        });
     }
 
     @Override

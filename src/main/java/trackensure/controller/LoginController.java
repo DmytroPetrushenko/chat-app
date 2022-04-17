@@ -24,9 +24,9 @@ public class LoginController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
         String login = req.getParameter("login");
-        User user = userService.login(login);
+        User user = userService.logging(login);
         HttpSession session = req.getSession();
-        session.setAttribute("userId", user.getId());
+        session.setAttribute("login", login);
         resp.sendRedirect("/chat");
     }
 }

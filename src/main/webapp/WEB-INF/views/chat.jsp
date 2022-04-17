@@ -9,21 +9,7 @@
     </head>
     <body>
     <div class="messages">
-        <c:forEach items="${fiftyMessages}" var="oneMessage">
-            <c:if test="${oneMessage.user.id == user.id}">
-                <div class="block">
-                    <div class="message_left">${oneMessage.message}</div>
-                    <div class="user_right">Me</div>
-                </div>
-            </c:if>
-            <c:if test="${oneMessage.user.id != user.id}">
-                <div class="block">
-                    <div class="user_left">${oneMessage.user.login}</div>
-                    <div class="message_right">${oneMessage.message}</div>
-                </div>
-            </c:if>
-        </c:forEach>
-    </div>
+
 
     <div class="form">
         <form method="post" action="${pageContext.request.contextPath}/chat">
