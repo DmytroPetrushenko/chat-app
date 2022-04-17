@@ -2,7 +2,7 @@ package trackensure.model;
 
 public class User {
     private Long id;
-    private String name;
+    private String login;
 
     public Long getId() {
         return id;
@@ -12,19 +12,19 @@ public class User {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getLogin() {
+        return login;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setLogin(String login) {
+        this.login = login;
     }
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
+        return "User{"
+                + "id=" + id
+                + ", name='" + login + '\''
+                + '}';
     }
 }

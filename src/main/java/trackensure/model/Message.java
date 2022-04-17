@@ -2,7 +2,7 @@ package trackensure.model;
 
 public class Message {
     private Long id;
-    private Long userId;
+    private User user;
     private String message;
     private String timeStamp;
 
@@ -14,12 +14,12 @@ public class Message {
         this.id = id;
     }
 
-    public Long getUserId() {
-        return userId;
+    public User getUser() {
+        return user;
     }
 
-    public void setUserId(Long userId) {
-        this.userId = userId;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getMessage() {
@@ -42,7 +42,7 @@ public class Message {
     public String toString() {
         return "Message{"
                 + "id = " + id
-                + ", userId = " + userId
+                + ", user = " + user
                 + ", message = " + message
                 + ", timeStamp = " + timeStamp
                 + "}";

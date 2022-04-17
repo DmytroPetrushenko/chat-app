@@ -1,22 +1,27 @@
 package trackensure.dao.impl;
 
-import trackensure.dao.UserDao;
-import trackensure.model.User;
-import trackensure.util.ConnectionUtil;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import trackensure.dao.UserDao;
+import trackensure.lib.Dao;
+import trackensure.model.User;
+import trackensure.util.ConnectionUtil;
 
+@Dao
 public class UserDaoImpl implements UserDao {
     @Override
     public User create(User user) {
-        String query = "INSERT INTO users (name) VALUES (?)";
+        String query = "INSERT INTO users (login) VALUES (?)";
         try (Connection connection = ConnectionUtil.getConnection();
-             PreparedStatement createUserStatement = connection
-                     .prepareStatement(query, Statement.RETURN_GENERATED_KEYS) ) {
-            createUserStatement.setString(1, user.getName());
+                 PreparedStatement createUserStatement = connection
+                         .prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+            createUserStatement.setString(1, user.getLogin());
             createUserStatement.executeUpdate();
             ResultSet resultSet = createUserStatement.getGeneratedKeys();
             if (resultSet.next()) {
@@ -33,7 +38,7 @@ public class UserDaoImpl implements UserDao {
     public Optional<User> get(Long id) {
         String query = "SELECT * FROM users WHERE id = ? AND is_deleted = false";
         try (Connection connection = ConnectionUtil.getConnection();
-             PreparedStatement getUserStatement = connection.prepareStatement(query)) {
+                 PreparedStatement getUserStatement = connection.prepareStatement(query)) {
             getUserStatement.setObject(1, id);
             ResultSet resultSet = getUserStatement.executeQuery();
             if (resultSet.next()) {
@@ -48,10 +53,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Boolean update(User user) {
-        String query = "UPDATE users SET name = ? WHERE id = ? AND is_deleted = false";
+        String query = "UPDATE users SET login = ? WHERE id = ? AND is_deleted = false";
         try (Connection connection = ConnectionUtil.getConnection();
-             PreparedStatement updateUserStatement = connection.prepareStatement(query)) {
-            updateUserStatement.setString(1, user.getName());
+                 PreparedStatement updateUserStatement = connection.prepareStatement(query)) {
+            updateUserStatement.setString(1, user.getLogin());
             updateUserStatement.setObject(2, user.getId());
             return updateUserStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -64,7 +69,7 @@ public class UserDaoImpl implements UserDao {
     public boolean delete(User user) {
         String query = "UPDATE users SET is_deleted = true WHERE id = ?";
         try (Connection connection = ConnectionUtil.getConnection();
-             PreparedStatement deleteUserStatement = connection.prepareStatement(query)) {
+                 PreparedStatement deleteUserStatement = connection.prepareStatement(query)) {
             deleteUserStatement.setObject(1, user.getId());
             return deleteUserStatement.executeUpdate() > 0;
         } catch (SQLException e) {
@@ -75,10 +80,10 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public List<User> getAll() {
-        String query ="SELECT * FROM users WHERE is_deleted = false";
+        String query = "SELECT * FROM users WHERE is_deleted = false";
         List<User> userList = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection();
-             Statement getAllStatement = connection.createStatement()) {
+                 Statement getAllStatement = connection.createStatement()) {
             ResultSet resultSet = getAllStatement.executeQuery(query);
             while (resultSet.next()) {
                 userList.add(getUserFromResultSet(resultSet));
@@ -93,7 +98,24 @@ public class UserDaoImpl implements UserDao {
     private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
         User user = new User();
         user.setId(resultSet.getObject("id", Long.class));
-        user.setName(resultSet.getString("name"));
+        user.setLogin(resultSet.getString("login"));
         return user;
+    }
+
+    @Override
+    public Optional<User> getByLogin(String login) {
+        String query = "SELECT * FROM users WHERE login = ?";
+        try (Connection connection = ConnectionUtil.getConnection();
+                 PreparedStatement getByLoginStatement = connection.prepareStatement(query)) {
+            getByLoginStatement.setString(1, login);
+            ResultSet resultSet = getByLoginStatement.executeQuery();
+            if (resultSet.next()) {
+                return Optional.of(getUserFromResultSet(resultSet));
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Can't get a user by login "
+                    + login + " in DB", e);
+        }
+        return Optional.empty();
     }
 }

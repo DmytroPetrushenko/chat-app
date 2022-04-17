@@ -10,16 +10,16 @@ CREATE TABLE `messages` (
                             `user_id` bigint NOT NULL,
                             `message` varchar(200) NOT NULL,
                             `time_stamp` varchar(45) NOT NULL,
-                            `is_deleted` tinyint NOT NULL DEFAULT '1',
+                            `is_deleted` tinyint NOT NULL DEFAULT '0',
                             PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
 -- ----------------------------
 -- Table structure for users
 -- ----------------------------
 CREATE TABLE `users` (
                          `id` bigint NOT NULL AUTO_INCREMENT,
-                         `name` varchar(45) NOT NULL,
+                         `login` varchar(45) NOT NULL,
                          `is_deleted` tinyint NOT NULL DEFAULT '0',
                          PRIMARY KEY (`id`),
-                         UNIQUE KEY `name_UNIQUE` (`name`)
+                         UNIQUE KEY `name_UNIQUE` (`login`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3
