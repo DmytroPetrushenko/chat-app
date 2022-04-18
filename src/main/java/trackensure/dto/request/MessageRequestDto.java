@@ -6,5 +6,4 @@ import lombok.Data;
 public class MessageRequestDto {
     private String login;
     private String message;
-    private String timeStamp;
 }

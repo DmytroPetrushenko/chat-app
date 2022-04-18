@@ -1,5 +1,6 @@
 package trackensure.service.mapper.impl;
 
+import java.time.LocalDateTime;
 import trackensure.dto.request.MessageRequestDto;
 import trackensure.dto.response.MessageResponseDto;
 import trackensure.lib.Inject;
@@ -18,7 +19,7 @@ public class MessageMapperImpl implements MessageMapper {
         Message message = new Message();
         message.setUser(userService.getByLogin(requestDto.getLogin()));
         message.setMessage(requestDto.getMessage());
-        message.setTimeStamp(requestDto.getTimeStamp());
+        message.setTimeStamp(LocalDateTime.now().toString());
         return message;
     }
 

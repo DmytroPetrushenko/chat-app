@@ -12,7 +12,6 @@ public class UserServiceImpl implements UserService {
     @Inject
     private UserDao userDao;
 
-
     @Override
     public User logging(String login) {
         Optional<User> optionalUser = userDao.getByLogin(login);
