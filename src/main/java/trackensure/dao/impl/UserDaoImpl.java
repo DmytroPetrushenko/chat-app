@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import trackensure.dao.UserDao;
 import trackensure.lib.Dao;
 import trackensure.model.User;
@@ -15,8 +17,12 @@ import trackensure.util.ConnectionUtil;
 
 @Dao
 public class UserDaoImpl implements UserDao {
+    private static final Logger logger = LogManager.getLogger(UserDaoImpl.class);
+
     @Override
     public User create(User user) {
+        logger.info("create method was called. User: {}", user);
+
         String query = "INSERT INTO users (login) VALUES (?)";
         try (Connection connection = ConnectionUtil.getConnection();
                  PreparedStatement createUserStatement = connection
@@ -27,15 +33,16 @@ public class UserDaoImpl implements UserDao {
             if (resultSet.next()) {
                 user.setId(resultSet.getObject(1, Long.class));
             }
-            return user;
         } catch (SQLException e) {
-            throw new RuntimeException("Can't create a user "
-                    + user + " in DB", e);
+            logger.error("Can't create a user " + user + " in DB", e);
         }
+        return user;
     }
 
     @Override
     public Optional<User> get(Long id) {
+        logger.info("get method was called. id: {}", id);
+
         String query = "SELECT * FROM users WHERE id = ? AND is_deleted = false";
         try (Connection connection = ConnectionUtil.getConnection();
                  PreparedStatement getUserStatement = connection.prepareStatement(query)) {
@@ -45,14 +52,14 @@ public class UserDaoImpl implements UserDao {
                 return Optional.of(getUserFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Can't get a user by id"
-                    + id + " from DB", e);
+            logger.error("Can't get a user by id" + id + " from DB", e);
         }
         return Optional.empty();
     }
 
     @Override
     public Boolean update(User user) {
+        logger.info("update method was called. User: {}", user);
         String query = "UPDATE users SET login = ? WHERE id = ? AND is_deleted = false";
         try (Connection connection = ConnectionUtil.getConnection();
                  PreparedStatement updateUserStatement = connection.prepareStatement(query)) {
@@ -60,26 +67,30 @@ public class UserDaoImpl implements UserDao {
             updateUserStatement.setObject(2, user.getId());
             return updateUserStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Can't update the user "
-                    + user + " in DB", e);
+            logger.error("Can't update the user " + user + " in DB", e);
         }
+        return false;
     }
 
     @Override
     public boolean delete(User user) {
+        logger.info("delete method was called. User: {}", user);
+
         String query = "UPDATE users SET is_deleted = true WHERE id = ?";
         try (Connection connection = ConnectionUtil.getConnection();
                  PreparedStatement deleteUserStatement = connection.prepareStatement(query)) {
             deleteUserStatement.setObject(1, user.getId());
             return deleteUserStatement.executeUpdate() > 0;
         } catch (SQLException e) {
-            throw new RuntimeException("Can't delete the user "
-                    + user + " in DB", e);
+            logger.error("Can't delete the user " + user + " in DB", e);
         }
+        return false;
     }
 
     @Override
     public List<User> getAll() {
+        logger.info("getAll method was called.");
+
         String query = "SELECT * FROM users WHERE is_deleted = false";
         List<User> userList = new ArrayList<>();
         try (Connection connection = ConnectionUtil.getConnection();
@@ -88,11 +99,10 @@ public class UserDaoImpl implements UserDao {
             while (resultSet.next()) {
                 userList.add(getUserFromResultSet(resultSet));
             }
-            return userList;
         } catch (SQLException e) {
-            throw new RuntimeException("Can't get all users "
-                    + " from DB", e);
+            logger.error("Can't get all users " + " from DB", e);
         }
+        return userList;
     }
 
     private User getUserFromResultSet(ResultSet resultSet) throws SQLException {
@@ -104,6 +114,8 @@ public class UserDaoImpl implements UserDao {
 
     @Override
     public Optional<User> getByLogin(String login) {
+        logger.info("getByLogin method was called. login: {}", login);
+
         String query = "SELECT * FROM users WHERE login = ?";
         try (Connection connection = ConnectionUtil.getConnection();
                  PreparedStatement getByLoginStatement = connection.prepareStatement(query)) {
@@ -113,8 +125,7 @@ public class UserDaoImpl implements UserDao {
                 return Optional.of(getUserFromResultSet(resultSet));
             }
         } catch (SQLException e) {
-            throw new RuntimeException("Can't get a user by login "
-                    + login + " in DB", e);
+            logger.error("Can't get a user by login " + login + " in DB", e);
         }
         return Optional.empty();
     }

@@ -4,7 +4,7 @@ import java.util.List;
 import trackensure.model.Message;
 
 public interface MessageService {
-    List<Message> getFiftyMessages();
+    List<Message> getNMessages(Long quantity);
 
     Message create(Message message);
 }

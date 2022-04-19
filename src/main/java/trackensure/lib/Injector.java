@@ -10,8 +10,11 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Injector {
+    private static final Logger logger = LogManager.getLogger(Injector.class);
     private static final Map<String, Injector> injectors = new HashMap<>();
     private final Map<Class<?>, Object> instanceOfClasses = new HashMap<>();
     private final List<Class<?>> classes = new ArrayList<>();
@@ -25,6 +28,8 @@ public class Injector {
     }
 
     public static Injector getInstance(String mainPackageName) {
+        logger.info("static getInstance method was called. mainPackageName: {}", mainPackageName);
+
         if (injectors.containsKey(mainPackageName)) {
             return injectors.get(mainPackageName);
         }
@@ -34,6 +39,8 @@ public class Injector {
     }
 
     public Object getInstance(Class<?> certainInterface) {
+        logger.info("getInstance method was called. certainInterface: {}", certainInterface);
+
         Object newInstanceOfClass = null;
         Class<?> clazz = findClassExtendingInterface(certainInterface);
         Object instanceOfCurrentClass = createInstance(clazz);
