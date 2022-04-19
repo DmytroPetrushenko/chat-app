@@ -15,6 +15,7 @@ import trackensure.service.mapper.MessageMapper;
 @Service
 public class MessageMapperImpl implements MessageMapper {
     private static final Logger logger = LogManager.getLogger(MessageMapperImpl.class);
+
     @Inject
     private UserService userService;
 
